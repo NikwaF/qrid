@@ -77,8 +77,8 @@
 				<a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
 					<img src="<?= base_url(); ?>asc/user_blank.png" alt="" />
 					<span class="profile-info">
-						<?= $user_session['nama']; ?>
-						<small><?= $user_session['level']; ?></small>
+						<?= $_SESSION['nama']; ?>
+						<small><?= $_SESSION['level']; ?></small>
 					</span>
 				</a>
 				<ul class="dropdown-menu animation-dock">

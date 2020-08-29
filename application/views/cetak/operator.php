@@ -26,7 +26,7 @@
 			<td style="text-align: center"><?=$no?></td>
 			<td style="text-align: center"><?=$d->nik?></td>
 			<td style="text-align: center"><?=$d->nama?></td>
-			<td style="text-align: center"><?=$d->registered_date?></td>
+			<td style="text-align: center"><?= tgl_indo($d->registered_date)?></td>
 		</tr>	
 		<?php
 			$no++;

@@ -45,10 +45,10 @@
 														<?= $b['nama']; ?>
 													</td>
 													<td>
-														<?= strtoupper($b['status']); ?>
+														<?= $b['status'] == 1 ? 'AKTIF' : 'TIDAK AKTIF'; ?>
 													</td>
 													<td>
-														<?= $b['registered_date']; ?>
+														<?= tgl_indo($b['registered_date']); ?>
 													</td>
 												</tr>
 												<?php

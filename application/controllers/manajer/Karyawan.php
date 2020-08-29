@@ -19,7 +19,7 @@ class Karyawan extends CI_Controller
 			redirect('autha');
 		}
         $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['data'] = $this->db->get_where('tbl_users', ['level' => 'karyawan'])->result_array();
+        $data['data'] = $this->db->get_where('tbl_users', ['id_role' => 3])->result_array();
         $data['title'] = 'ABSENSI UPK CERMEE | Karyawan List';
 
         $this->load->view('manajer/_partials/header', $data);

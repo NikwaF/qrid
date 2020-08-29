@@ -41,19 +41,19 @@ class Auth extends CI_Controller
     private function _login()
     {
         // menangkap inputan dari text field dari form login
-        $email = $this->input->post('nik');
+        $nik = $this->input->post('nik');
         $sandi = $this->input->post('passcode');
 
         // query untuk mencari data email yang sesuai di db dari text field email
-        $user = $this->db->get_where('tbl_users', ['nik' => $email])->row_array();
+        $user = $this->db->get_where('tbl_users', ['nik' => $nik])->row_array();
         if ($user != null) { // jike usernya ada
             if ($sandi == $user['passcode']) { // jika passwordnya benar
           // menyimpan session email & id level user
-            if($user['level'] == "karyawan") {
+            if($user['id_role'] == 3) {
           $data = [
             'nik'      => $user['nik'],
-            'level'   => $user['level'],
-            'divisi'   => $user['divisi'],
+            'role'   => $user['id_role'],
+            'level'   => 'karyawan',
             'nama'       => $user['nama']
           ];
             $this->session->set_userdata($data);
@@ -78,8 +78,8 @@ class Auth extends CI_Controller
     public function logout()
     {
         $this->session->unset_userdata('nik');
+        $this->session->unset_userdata('role');
         $this->session->unset_userdata('level');
-        $this->session->unset_userdata('divisi');
         $this->session->unset_userdata('nama');
         $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">
     Anda telah logout!</div>');

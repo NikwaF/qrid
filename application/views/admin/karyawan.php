@@ -53,23 +53,23 @@
 													<td>
 														<?= $b['nik']; ?>
 													</td>
-													<td>
+													<td class="text-capitalize">
 														<?= $b['nama']; ?>
 													</td>
-													<td>
-														<?= strtoupper($b['level']); ?>
+													<td class="text-uppercase">
+													<?= $b['id_role'] == 3 ? 'Karyawan' : '-'; ?>
+													</td>
+													<td class="text-uppercase">
+													<?= $b['status'] == 1 ? 'AKTIF' : 'TIDAK AKTIF'; ?>
 													</td>
 													<td>
-														<?= strtoupper($b['status']); ?>
-													</td>
-													<td>
-														<?= $b['registered_date']; ?>
+														<?= tgl_indo($b['registered_date']); ?>
 													</td>
 													<td>
 													    <a href="<?= base_url(); ?>admin/karyawan/edit/<?= $b['id']; ?>" class="btn btn-outline-dark btn-icon rounded-circle">
 															<div><i class="fa fa-edit"></i></div>
 														</a>
-														<a href="<?= base_url(); ?>admin/karyawan/hapus/<?= $b['id']; ?>" class="btn btn-outline-dark btn-icon rounded-circle" title="Hapus Produk">
+														<a href="<?= base_url(); ?>admin/karyawan/hapus/<?= $b['id']; ?>" class="btn btn-outline-dark btn-icon rounded-circle tombol-hapus" title="Hapus Produk">
 															<div><i class="fa fa-trash"></i></div>
 														</a>
 													</td>

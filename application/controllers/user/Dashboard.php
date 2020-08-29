@@ -6,11 +6,11 @@ class Dashboard extends CI_Controller{
   public function __construct()
   {
     parent::__construct();
-    if($this->session->userdata('level') == "admin") {
+    if($this->session->userdata('role') == 1) {
             redirect('authw/logout');
-        } elseif($this->session->userdata('level') == "manajer") {
-            redirect('autha/logout');
-        }
+    } elseif($this->session->userdata('role') == 2) {
+        redirect('autha/logout');
+    }
   }
 
   function index()

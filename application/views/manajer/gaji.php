@@ -36,7 +36,7 @@
 												<th>ID</th>
 												<th>Jabatan</th>
 												<th>Nominal</th>
-												<th>Menu</th>
+												<th>Aksi</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -48,7 +48,7 @@
 													<td>
 														<?= $i++ ?>
 													</td>
-													<td>
+													<td class="text-uppercase">
 														<?= $b['jabatan']; ?>
 													</td>
 													<td>

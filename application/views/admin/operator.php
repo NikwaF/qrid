@@ -35,7 +35,6 @@
 												<th>ID</th>
 												<th>Nomer Karyawan</th>
 												<th>Nama Lengkap</th>
-												<th>Divisi</th>
 												<th>Level</th>
 												<th>Status</th>
 												<th>Terdaftar sejak</th>
@@ -54,20 +53,17 @@
 													<td>
 														<?= $b['nik']; ?>
 													</td>
-													<td>
+													<td class="text-capitalize">
 														<?= $b['nama']; ?>
 													</td>
-													<td>
-														<?= $b['divisi']; ?>
+													<td class="text-uppercase">
+														<?= $b['id_role'] == 2 ? 'Admin' : 'Manajer'; ?>
+													</td>
+													<td class="text-uppercase">
+														<?= $b['status'] == 1 ? 'AKTIF' : 'TIDAK AKTIF'; ?>
 													</td>
 													<td>
-														<?= strtoupper($b['level']); ?>
-													</td>
-													<td>
-														<?= strtoupper($b['status']); ?>
-													</td>
-													<td>
-														<?= $b['registered_date']; ?>
+														<?= tgl_indo($b['registered_date']); ?>
 													</td>
 													<td>
 													    <a href="<?= base_url(); ?>admin/administrator/edit/<?= $b['id']; ?>" class="btn btn-outline-dark btn-icon rounded-circle">

@@ -35,7 +35,7 @@
 							<div class="form-group" style="margin-bottom: 20px;">
 								<label for="nama_barang" class="col-sm-2 control-label">Password</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" id="passcode" name="passcode" placeholder="Password Karyawan" value="<?= set_value('passcode') ?>">
+									<input type="password" class="form-control" id="passcode" name="passcode" placeholder="Password Karyawan" value="<?= set_value('passcode') ?>">
 									<?= form_error('passcode','<div class="bg-info text-dark"><small>','</small></div>'); ?>
 								</div>
 							</div>

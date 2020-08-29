@@ -13,8 +13,8 @@ class Karyawan extends CI_Controller
         if(!isset($_SESSION['nik'])) {
 			redirect('authw');
 		}
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['data'] = $this->db->get_where('tbl_users', ['level' => 'karyawan'])->result_array();
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        $data['data'] = $this->db->get_where('tbl_users', ['id_role' => 3, 'status' => 1])->result_array();
         $data['title'] = 'ABSENSI UPK CERMEE | Karyawan List';
 
         $this->load->view('admin/_partials/header', $data);
@@ -42,7 +42,7 @@ class Karyawan extends CI_Controller
 			redirect('authw');
 		}
         $data['title'] = 'ABSENSI UPK CERMEE | Add Operator';
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
 
 		$this->form_validation->set_rules('nama', 'nama lengkap', 'trim|required');
 		$this->form_validation->set_rules('nik', 'nomer karyawan', 'trim|required');
@@ -54,12 +54,11 @@ class Karyawan extends CI_Controller
             $this->load->view('admin/_partials/footer');
         } else {
             $data = [
-                'id_level' => 1,
                 'nik' => trim($this->input->post('nik')),
                 'passcode' => $this->input->post('passcode'),
                 'nama' => $this->input->post('nama'),
-                'level' => 'karyawan',
-                'status' => 'aktif',
+                'id_role' => 3,
+                'status' => 1,
                 'registered_date' => date('Y-m-d')
             ];
             $this->db->insert('tbl_users', $data);
@@ -99,7 +98,7 @@ class Karyawan extends CI_Controller
 		}
         $data['title'] = 'ABSENSI UPK CERMEE | Edit Karyawan';
         $id = $this->uri->segment(4);
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
         $data['edit'] = $this->db->get_where('tbl_users', ['id' => $id])->row_array();
 
         $this->form_validation->set_rules('id', 'id karyawan', 'trim|required');
@@ -154,7 +153,7 @@ class Karyawan extends CI_Controller
     public function hapus($id)
     {
         $this->db->where('id', $id);
-		$this->db->delete('tbl_users');
+		$this->db->update('tbl_users', ['status' => 0]);
         redirect('admin/karyawan');
     }
     

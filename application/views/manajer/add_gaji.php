@@ -28,10 +28,10 @@
 							<div class="form-group" style="margin-bottom: 20px;">
 								<label for="nama_barang" class="col-sm-2 control-label">Jabatan</label>
 								<div class="col-sm-10">
-								    <select class="form-control" name="jabatan" id="jabatan">
-								        <option value="#">Pilih salah satu</option>
-								        <option value="karyawan">Karyawan</option>
-										<option value="admin">Administrator</option>
+								    <select class="form-control text-uppercase" name="jabatan" id="jabatan">
+												<?php foreach($role as $rl): ?>
+													<option value="<?= $rl->id_role ?>"><?= $rl->nama_role ?></option>
+												<?php endforeach; ?>
 								    </select>
 									<?= form_error('jabatan','<div class="bg-info text-dark"><small>','</small></div>'); ?>
 								</div>

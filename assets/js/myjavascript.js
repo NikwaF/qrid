@@ -8,9 +8,9 @@ $('.tombol-hapus').on('click', function(e) {
     text: "Kamu tidak akan bisa mengembalikannya!",
     type: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Hapus produk!'
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Hapus data!', cancelButtonText: 'Batalkan!'
     }).then((result) => {
       if (result.value) {
         document.location.href = href;

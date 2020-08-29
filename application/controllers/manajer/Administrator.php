@@ -19,7 +19,7 @@ class Administrator extends CI_Controller
 			redirect('authw');
 		}
         $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['data'] = $this->db->get_where('tbl_users', ['level' => 'admin'])->result_array();
+        $data['data'] = $this->db->get_where('tbl_users', ['id_role' => 2])->result_array();
         $data['title'] = 'ABSENSI UPK CERMEE | Operator List';
 
         $this->load->view('manajer/_partials/header', $data);

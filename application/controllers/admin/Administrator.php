@@ -18,8 +18,8 @@ class Administrator extends CI_Controller
         if(!isset($_SESSION['nik'])) {
 			redirect('authw');
 		} else {
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['data'] = $this->db->get_where('tbl_users', ['level' => 'admin'])->result_array();
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        $data['data'] = $this->db->get_where('tbl_users', ['(id_role = 1 OR id_role = 2)' => null, 'status' => 1])->result_array();
         $data['title'] = 'ABSENSI UPK CERMEE | Operator List';
 
         $this->load->view('admin/_partials/header', $data);
@@ -49,7 +49,7 @@ class Administrator extends CI_Controller
 			redirect('authw');
 		} else {
         $data['title'] = 'ABSENSI UPK CERMEE| Add Operator';
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
 
 		$this->form_validation->set_rules('nama', 'nama lengkap', 'trim|required');
 		$this->form_validation->set_rules('nik', 'nomer karyawan', 'trim|required');
@@ -62,12 +62,11 @@ class Administrator extends CI_Controller
             $this->load->view('admin/_partials/footer');
         } else {
             $data = [
-                'id_level' => 1,
                 'nik' => trim($this->input->post('nik')),
                 'passcode' => $this->input->post('passcode'),
                 'nama' => $this->input->post('nama'),
-                'level' => $this->input->post('level'),
-                'status' => 'aktif',
+                'id_role' => $this->input->post('level'),
+                'status' => 1,
                 'registered_date' => date('Y-m-d')
             ];
             $this->db->insert('tbl_users', $data);
@@ -123,6 +122,8 @@ class Administrator extends CI_Controller
         } else {
             $data = [
                 'nik' => trim($this->input->post('nik')),
+                'nama' => trim($this->input->post('nama')),
+                'id_role' => trim($this->input->post('level')),
                 'passcode' => trim($this->input->post('passcode')),
             ];
             $this->db->where('id', $this->input->post('id'));
@@ -169,7 +170,7 @@ class Administrator extends CI_Controller
             redirect('authw');
         } else {
         $this->db->where('id', $id);
-		$this->db->delete('tbl_users');
+		$this->db->update('tbl_users', ['status' => 0]);
         redirect('admin/administrator');
         }
     }

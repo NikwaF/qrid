@@ -35,17 +35,16 @@
 							<div class="form-group" style="margin-bottom: 20px;">
 								<label for="nama_barang" class="col-sm-2 control-label">Password</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" id="passcode" name="passcode" placeholder="Password Karyawan" value="<?= set_value('passcode') ?>">
+									<input type="password" class="form-control" id="passcode" name="passcode" placeholder="Password Karyawan" value="<?= set_value('passcode') ?>">
 									<?= form_error('passcode','<div class="bg-info text-dark"><small>','</small></div>'); ?>
 								</div>
 							</div>
 							<div class="form-group" style="margin-bottom: 20px;">
 								<label for="nama_barang" class="col-sm-2 control-label">Jabatan</label>
 								<div class="col-sm-10">
-								    <select class="form-control" name="level" id="level">
-								        <option value="#">Pilih salah satu</option>
-								        <option value="admin">Admin</option>
-								        <option value="manajer">Manajer</option>
+								    <select class="form-control text-uppercase" name="level" id="level">
+								        <option value="2">Admin</option>
+								        <option value="1">Manajer</option>
 								    </select>
 									<?= form_error('level','<div class="bg-info text-dark"><small>','</small></div>'); ?>
 								</div>

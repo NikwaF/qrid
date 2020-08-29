@@ -39,7 +39,7 @@ class Cetak extends CI_Controller {
 		}
 		
 		//view tampilan website\
-		$a['data']		= $this->db->query("SELECT * FROM tbl_users WHERE level = 'karyawan'")->result();
+		$a['data']		= $this->db->query("SELECT * FROM tbl_users WHERE id_role = 3")->result();
 		$this->load->view('cetak/karyawan', $a);
 	}
 
@@ -49,7 +49,7 @@ class Cetak extends CI_Controller {
 		}
 		
 		//view tampilan website\
-		$a['data']		= $this->db->query("SELECT * FROM tbl_users WHERE level = 'admin'")->result();
+		$a['data']		= $this->db->query("SELECT * FROM tbl_users WHERE id_role = 2")->result();
 		$this->load->view('cetak/operator', $a);
 	}
 	

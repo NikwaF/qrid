@@ -13,7 +13,6 @@
 			<th width="5%">No</th>
 			<th width="15%">No. Karyawan</th>
 			<th width="10%">Nama Lengkap</th>
-			<th width="15%">Asal Divisi</th>
 			<th width="7%">Terdaftar pada</th>
 		</tr>
 		<?php 
@@ -27,8 +26,7 @@
 			<td style="text-align: center"><?=$no?></td>
 			<td style="text-align: center"><?=$d->nik?></td>
 			<td style="text-align: center"><?=$d->nama?></td>
-			<td style="text-align: center"><?=$d->divisi?></td>
-			<td style="text-align: center"><?=$d->registered_date?></td>
+			<td style="text-align: center"><?= tgl_indo($d->registered_date);?></td>
 		</tr>	
 		<?php
 			$no++;
