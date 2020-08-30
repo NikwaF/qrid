@@ -23,7 +23,8 @@
 											<tr>
 												<th>ID</th>
 												<th>Thumbnail</th>
-												<th>Timeout</th>
+												<th>Jam Masuk</th>
+												<th>Jam Keluar</th>
 												<th>Created at</th>
 												<th>Create By</th>
 												<th>Menu</th>
@@ -42,8 +43,11 @@
 														<img src="<?= base_url() ?>upload/qr_image/<?= $b['thumbnail']; ?>" style="height: 150px">
 													</td>
 													<td>
-														<?= $b['timeout']; ?>
+														<?= $b['jam_masuk']; ?>
 													</td>
+													<td>
+														<?= $b['jam_pulang']; ?>
+													</td>													
 													<td>
 														<?= $b['created_at']; ?>
 													</td>

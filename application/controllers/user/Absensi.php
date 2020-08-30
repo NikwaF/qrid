@@ -18,8 +18,48 @@ class Absensi extends CI_Controller
         if (!isset($_SESSION['nik'])) {
             redirect('auth');
         } else {
+        $jam_now = strtotime("now");
+        $tanggal = date('Y-m-d');
+
+        $this->db->select('id,jam_masuk, jam_pulang');
+        $this->db->where(['tanggal' => $tanggal]);
+        $absen = $this->db->get('tbl_qrcode')->row();
+
+
+        if($absen == null){
+           $data['status'] = 0;
+        }
+        $data['pesan'] = null;
+
+        $jam_masuk = strtotime($absen->jam_masuk);
+        $arr_masuk = explode(':', $absen->jam_masuk);
+        $jam_masuk_mulai = $jam_masuk - 60*60; 
+        $jam_masuk_toleransi = $jam_masuk + 60*15;
+        
+        if($jam_now < $jam_masuk_mulai){
+            // belum waktu absen
+            $data['status'] = 1;
+            $data['pesan'] = date('H:i', $jam_masuk_mulai). ' sampai jam '.date('H:i', $jam_masuk);
+        }
+
+        if($jam_now >= $jam_masuk_mulai && $jam_now <= $jam_masuk){
+            // bisa absen , tidak telat
+            $data['status'] = 2;
+        }
+
+        if($jam_now >= $jam_masuk && $jam_now <= $jam_masuk_toleransi){
+            // bisa absen , telat
+            $data['status'] = 3;
+        }
+
+        if($jam_now > $jam_masuk && $jam_now > $jam_masuk_toleransi){
+            // tidak bisa absen ,telat , absen tidak bisa 
+            $data['status'] = 4;
+            $data['pesan'] = date('H:i', $jam_masuk_mulai). ' sampai jam '.date('H:i', $jam_masuk_toleransi);
+        }
+
         // $data['judul'] = 'Dashboard';
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
         $data['title'] = 'ABSENSI UPK CERMEE  | Absensi';
 
         $this->load->view('user/_partials/header', $data);

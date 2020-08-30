@@ -40,7 +40,7 @@ class Presensi extends CI_Controller
         if(!isset($_SESSION['nik'])) {
 			redirect('authw');
 		}
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
         $data['data'] = $this->db->get('tbl_pengajuan')->result_array();
         $data['title'] = 'SI Absensi | Request Permission';
 
@@ -55,8 +55,8 @@ class Presensi extends CI_Controller
 			redirect('authw');
 		}
         $data['title'] = 'SI Absensi | Add Request';
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['data'] = $this->db->query("SELECT * FROM tbl_users WHERE level = 'karyawan'")->result_array();
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        $data['data'] = $this->db->query("SELECT * FROM tbl_users WHERE id_role = 3")->result_array();
 
 		$this->form_validation->set_rules('nik', 'nama lengkap', 'trim|required');
 		$this->form_validation->set_rules('request', 'request karyawan', 'trim|required');
@@ -85,10 +85,12 @@ class Presensi extends CI_Controller
 			redirect('authw');
 		}
         $data['title'] = 'SI ABSENSI UPK CERMEE | Add QR Code';
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        $post = $this->input->post();
+        // echo json_encode($post);
+        // return;
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
 
-		$this->form_validation->set_rules('timeout', 'timeout', 'trim|required');
-		$this->form_validation->set_rules('tanggal', 'tanggal', 'trim|required');
+		$this->form_validation->set_rules('tanggal', 'tanggal', 'required');
 
         if ($this->form_validation->run() == false) {
             $this->load->view('admin/_partials/header', $data);
@@ -97,14 +99,15 @@ class Presensi extends CI_Controller
         } else {
             $uniq = md5(rand(11111,99999));
             $data = [
-                'timeout' => trim($this->input->post('timeout')),
+                'jam_masuk' => $post['jam_masuk'],
+                'jam_pulang' => $post['jam_pulang'],
                 'thumbnail' => $uniq.".png",
-                'created_at' => trim($this->input->post('tanggal')),
+                'tanggal' => $post['tanggal'],
+                'created_at' => date('Y-m-d H:i:s'),
                 'created_by' => $this->session->userdata('nik')
             ];
             $timeout = $this->input->post('timeout');
-            $unix =  $this->input->post('timeout').'-'.rand(111,999).'code.png';     
-            $params['data'] = $timeout;
+            $params['data'] = $post['jam_masuk'].'-'.$post['jam_pulang'];
 			$params['level'] = 'H';
 			$params['size'] = 4;
 			$params['savename'] = FCPATH."upload/qr_image/".$uniq.".png";
