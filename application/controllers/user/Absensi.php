@@ -25,37 +25,37 @@ class Absensi extends CI_Controller
         $this->db->where(['tanggal' => $tanggal]);
         $absen = $this->db->get('tbl_qrcode')->row();
 
+        $data['pesan'] = null;
 
         if($absen == null){
            $data['status'] = 0;
-        }
-        $data['pesan'] = null;
-
-        $jam_masuk = strtotime($absen->jam_masuk);
-        $arr_masuk = explode(':', $absen->jam_masuk);
-        $jam_masuk_mulai = $jam_masuk - 60*60; 
-        $jam_masuk_toleransi = $jam_masuk + 60*15;
-        
-        if($jam_now < $jam_masuk_mulai){
-            // belum waktu absen
-            $data['status'] = 1;
-            $data['pesan'] = date('H:i', $jam_masuk_mulai). ' sampai jam '.date('H:i', $jam_masuk);
-        }
-
-        if($jam_now >= $jam_masuk_mulai && $jam_now <= $jam_masuk){
-            // bisa absen , tidak telat
-            $data['status'] = 2;
-        }
-
-        if($jam_now >= $jam_masuk && $jam_now <= $jam_masuk_toleransi){
-            // bisa absen , telat
-            $data['status'] = 3;
-        }
-
-        if($jam_now > $jam_masuk && $jam_now > $jam_masuk_toleransi){
-            // tidak bisa absen ,telat , absen tidak bisa 
-            $data['status'] = 4;
-            $data['pesan'] = date('H:i', $jam_masuk_mulai). ' sampai jam '.date('H:i', $jam_masuk_toleransi);
+        } else{ 
+            $jam_masuk = strtotime($absen->jam_masuk);
+            $arr_masuk = explode(':', $absen->jam_masuk);
+            $jam_masuk_mulai = $jam_masuk - 60*60; 
+            $jam_masuk_toleransi = $jam_masuk + 60*15;
+            
+            if($jam_now < $jam_masuk_mulai){
+                // belum waktu absen
+                $data['status'] = 1;
+                $data['pesan'] = date('H:i', $jam_masuk_mulai). ' sampai jam '.date('H:i', $jam_masuk);
+            }
+    
+            if($jam_now >= $jam_masuk_mulai && $jam_now <= $jam_masuk){
+                // bisa absen , tidak telat
+                $data['status'] = 2;
+            }
+    
+            if($jam_now >= $jam_masuk && $jam_now <= $jam_masuk_toleransi){
+                // bisa absen , telat
+                $data['status'] = 3;
+            }
+    
+            if($jam_now > $jam_masuk && $jam_now > $jam_masuk_toleransi){
+                // tidak bisa absen ,telat , absen tidak bisa 
+                $data['status'] = 4;
+                $data['pesan'] = date('H:i', $jam_masuk_mulai). ' sampai jam '.date('H:i', $jam_masuk_toleransi);
+            }
         }
 
         // $data['judul'] = 'Dashboard';
@@ -73,64 +73,74 @@ class Absensi extends CI_Controller
         if (!isset($_SESSION['nik'])) {
             redirect('auth');
         } else {
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
         $data['title'] = 'SI Monitoring | Absensi';
+        $jam_now = strtotime("now");
+        $tanggal = date('Y-m-d');
+
         $timeout = $this->input->post('noijazah');
+        $time_out = explode('-', $timeout);
         $timenow = date('Y-m-d');
         $timeis = date('H:i:s');
 
-        $query_user = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $query_count = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->num_rows();
-        $id_user = $query_user['id'];
-        $jabatan = $query_user['level'];
-        $query_slip = $this->db->query("SELECT * FROM tbl_slip_gaji WHERE jabatan = '$jabatan'")->row_array();
-        $totalgaji = $query_slip['nominal'];
 
-        $query_qrcode = $this->db->query("SELECT * FROM tbl_qrcode WHERE timeout = '$timeout' AND created_at = '$timenow'")->row_array();
-        $usersku = $this->session->userdata('nik');
-        $query_absen = $this->db->query("SELECT * FROM tbl_kehadiran WHERE attendance_date = '$timenow' AND id_karyawan = '$usersku'")->num_rows();
-        $query_gaji = $this->db->query("SELECT * FROM tbl_gaji_pegawai WHERE id_karyawan = '$id_user' AND tgl_absen = '$timenow'")->num_rows();
-
-        if ($query_count == 1) {
-            if ($timeis < $timeout) {
-                if ($query_absen == 0) {
-                    $data = [
-                        'id_user' => $id_user,
-                        'id_karyawan' => $this->session->userdata('nik'),
-                        'in_time' => date('H:i:s'),
-                        'attendance_date' => date('Y-m-d'),
-                        'status' => 'Masuk',
-                    ];
-                    $this->db->insert('tbl_kehadiran', $data);
-                    $this->session->set_flashdata('message', '<div class="alert alert-outline alert-success">Berhasil! Tanggal '.$timenow.' Sudah absen masuk.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-                    redirect('user/absensi');
-                } else if ($query_absen == 1) {
-                    $data = [
-                        'out_time' => date('H:i:s'),
-                        'status' => 'Pulang',
-                    ];
-                    $this->db->where('id_karyawan', $this->session->userdata('nik'));
-                    $this->db->update('tbl_kehadiran', $data);
-                    if($query_gaji == 0) {
-                        $data = [
-                        'id_karyawan' => $id_user,
-                        'tgl_absen' => date('Y-m-d'),
-                        'nominal' => $totalgaji
-                    ];
-                    $this->db->insert('tbl_gaji_pegawai', $data);
-                    $this->session->set_flashdata('message', '<div class="alert alert-outline alert-success">Berhasil! Tanggal '.$timenow.' Sudah absen pulang.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-                    redirect('user/absensi');
-                    }
-                }
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-outline alert-danger">Maaf! Anda telah telat.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-                redirect('user/absensi');
-            }
-        } else if (!$query_count) {
+        // query si user. jika tidak ada = flashmessage user tidak ditemukan 
+        // cek kehadiran, apakah sudah ada atau belum . jika sudah ada berarti dia sudah absen masuk , dan sekarang lagi mau absen pulang 
+        // cek status = Masuk / Pulang . if pulang dont do anything
+        $user_data = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row();
+        if($user_data === null){
             $this->session->set_flashdata('message', '<div class="alert alert-outline alert-danger">Data tidak ditemukan!<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
             redirect('user/absensi');
         }
-    }
+        
+        // $qr = $this->db->get_where('tbl_qrcode', ['tanggal' => $tanggal, 'jam_masuk' => $time_out[0].':00', 'jam_pulang' => $time_out[1].':00'])->row();
+        $qr = $this->db->get_where('tbl_qrcode', ['tanggal' => $tanggal])->row();
+
+        $jam_masuk = strtotime($qr->jam_masuk);
+        $jam_masuk_mulai = $jam_masuk - 60*60; 
+        $jam_masuk_toleransi = $jam_masuk + 60*15;
+        $jam_pulang = strtotime($qr->jam_pulang);
+        $jam_pulang_maximal = $jam_pulang + 60*60; 
+
+        $kehadiran = $this->db->get_where('tbl_kehadiran', ['attendance_date' => $tanggal, 'id_user' => $user_data->id])->row();
+
+        if($kehadiran == null){
+            $data = [
+                'id_user' => $user_data->id,
+                'in_time' => date('H:i:s'),
+                'attendance_date' => $tanggal,
+                'status' => 'Masuk',
+            ];
+
+            $this->db->insert('tbl_kehadiran', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-outline alert-success">Berhasil! Tanggal '.$tanggal.' Sudah absen masuk.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+            redirect('user/absensi');
+        } else {
+            if(strtotime("now") < $jam_pulang){
+                $this->session->set_flashdata('message', '<div class="alert alert-outline alert-danger">Belum jam pulang woi!<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                redirect('user/absensi');
+            }
+
+            $data = [
+                'out_time' => date('H:i:s'),
+                'status' => 'Pulang',
+            ];
+
+            $this->db->where('id', $kehadiran->id);
+            $this->db->update('tbl_kehadiran', $data);
+            $gaji_default = $this->db->get_where('tbl_slip_gaji', ['id_role' => $user_data->id_role])->row();
+
+            $jam_absen = strtotime($kehadiran->in_time);
+            $penggajian = ['id_user' => $user_data->id, 'tgl_absen' => $tanggal, 'nominal' => $gaji_default->nominal];
+
+            if($jam_absen > $jam_masuk){
+                $penggajian['nominal'] = intval($gaji_default->nominal) - 20000; 
+            } 
+
+            $this->db->insert('tbl_gaji_pegawai', $penggajian);
+            $this->session->set_flashdata('message', '<div class="alert alert-outline alert-success">Berhasil! Tanggal '.$tanggal.' Sudah absen pulang.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+            redirect('user/absensi');
+        }
+        }
     }
 
     public function showqr()

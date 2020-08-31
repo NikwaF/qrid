@@ -26,7 +26,7 @@
 				<!-- BEGIN DATATABLE 1 -->
 				<!--end .row -->
 			<?php if($status === 0 || $status === 1 || $status === 4): ?>
-
+				<?= $this->session->flashdata('message') ?>
 
 			<?php else:  ?>
 
