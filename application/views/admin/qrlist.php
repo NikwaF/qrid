@@ -16,6 +16,7 @@
 				<div class="row">
 					<div class="card">
 						<div class="card-body">
+						<?= $this->session->userdata('message'); ?>
 							<div class="col-lg-12">
 								<div class="table-responsive">
 									<table id="datatable1" class="table table-striped table-hover">
@@ -25,6 +26,7 @@
 												<th>Thumbnail</th>
 												<th>Jam Masuk</th>
 												<th>Jam Keluar</th>
+												<th>Tanggal</th>
 												<th>Created at</th>
 												<th>Create By</th>
 												<th>Menu</th>
@@ -47,6 +49,9 @@
 													</td>
 													<td>
 														<?= $b['jam_pulang']; ?>
+													</td>													
+													<td>
+														<?= tgl_indo($b['tanggal']); ?>
 													</td>													
 													<td>
 														<?= $b['created_at']; ?>

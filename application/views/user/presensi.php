@@ -8,6 +8,25 @@
 
 	<!-- BEGIN CONTENT-->
 	<div id="content">
+		<?php if($status === 99): ?>
+			<section class="style-default-bright">
+			<div class="section-header">
+				<h2 class="text-dark text-center">Presensi Harian</h2>
+					<h2 style="color:red;" class="text-dark text-center">Hari ini anda sedang ijin</h2>
+			</div>
+			<div class="section-body" style="margin-top: 5rem">
+
+				<!-- BEGIN DATATABLE 1 -->
+				<!--end .row -->
+			</div>
+				<hr class="ruler-xxl" />
+
+			</div>
+			<!--end .section-body -->
+		</section>
+
+		<?php else:  ?>
+		
 		<section class="style-default-bright">
 			<div class="section-header">
 				<h2 class="text-dark text-center">Presensi Harian</h2>
@@ -52,6 +71,7 @@
 			</div>
 			<!--end .section-body -->
 		</section>
+		<?php endif; ?>
 	</div>
 	<!--end #content-->
 	<!-- END CONTENT -->

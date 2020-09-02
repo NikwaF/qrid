@@ -26,7 +26,7 @@
 									<select class="form-control" name="nik">
 										<option value="#">Pilih salah satu</option>
 										<?php foreach($data as $d): ?>
-										<option value="<?= $d['nik'] ?>"><?= $d['nama'] ?></option>
+										<option value="<?= $d['id'] ?>"><?= $d['nama'] ?></option>
 										<?php endforeach; ?>
 									</select>
 									<?= form_error('nik','<div class="bg-info text-dark"><small>','</small></div>'); ?>

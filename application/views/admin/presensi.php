@@ -35,7 +35,7 @@
 										<thead class="text-center">
 											<tr>
 												<th>ID</th>
-												<th>Nomer Karyawan</th>
+												<th>Nama Karyawan</th>
 												<th>Absen Masuk</th>
 												<th>Absen Keluar</th>
 												<th>Tanggal Absen</th>
@@ -52,7 +52,7 @@
 														<?= $i++ ?>
 													</td>
 													<td>
-														<?= $b['id_karyawan']; ?>
+														<?= $b['nama']; ?>
 													</td>
 													<td>
 														<?= $b['in_time']; ?>
@@ -68,10 +68,10 @@
 														?>
 													</td>
 													<td>
-														<?= $b['attendance_date']; ?>
+													<?=tgl_indo($b['attendance_date']) ?>
 													</td>
 													<td>
-														<?= $b['status']; ?>
+														<?= $b['status'] === 'Pulang' || $b['status'] === 'Masuk' ? 'Hadir' : '-' ?>
 													</td>
 												</tr>
 												<?php

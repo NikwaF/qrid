@@ -37,6 +37,33 @@ class Gaji extends CI_Controller
         return $this->db->get_where('role', ['status' => 1])->result();
     }
 
+    public function denda()
+    {
+        if(!isset($_SESSION['nik'])) {
+			redirect('authw');
+        }
+        $data['data'] = $this->db->get('denda_gaji')->row();
+        $post = $this->input->post();
+        $data['title'] = 'ABSENSI UPK CERMEE | Set Dendas';
+        // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        $data['role'] = $this->list_role();
+
+		$this->form_validation->set_rules('nominal', 'nominal', 'trim|required');
+
+        if ($this->form_validation->run() == false) {
+            $this->load->view('manajer/_partials/header', $data);
+            $this->load->view('manajer/set_denda', $data);
+            $this->load->view('manajer/_partials/footer');
+        } else {
+            //cek jika di slip gaji apa sudah ada nominal dengan jabatan tsb, 1 jabatan 1 row 
+            $this->db->where('id_denda', 1);
+            $this->db->update('denda_gaji', ['nominal' => $this->input->post('nominal'), 'tanggal_update' => date('Y-m-d')]);
+
+            $this->session->set_flashdata('message', '<div class="alert alert-outline alert-success">Data Denda berhasil diperbarui!<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+            redirect('manajer/gaji');
+        }
+    }
+
     public function tambah()
     {
         if(!isset($_SESSION['nik'])) {

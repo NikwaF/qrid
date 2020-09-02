@@ -20,6 +20,7 @@
 					<div class="col-md-8">
 						<a href="<?= base_url(); ?>cetak/cetak_gaji" target="_blank" class="btn ink-reaction btn-raised btn-dark"><i class="fa fa-print"></i> Print Gaji Karyawan</a>
 						<a href="<?= base_url(); ?>manajer/gaji/tambah" class="btn ink-reaction btn-raised btn-dark"><i class="fa fa-plus"></i> Add Gaji</a>
+						<a href="<?= base_url(); ?>manajer/gaji/denda" class="btn ink-reaction btn-raised btn-dark"><i class="fa fa-plus"></i> Set Denda</a>
 					</div>
 					<!--end .col -->
 				</div>

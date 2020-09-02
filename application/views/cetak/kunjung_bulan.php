@@ -25,9 +25,9 @@
 	} elseif ($month == 8) {
 		$mnth = "Agustus";
 	} elseif ($month == 9) {
-		$mnth = "Oktober";
-	} elseif ($month == 10) {
 		$mnth = "September";
+	} elseif ($month == 10) {
+		$mnth = "Oktober";
 	} elseif ($month == 11) {
 		$mnth = "November";
 	} elseif ($month == 12) {
@@ -38,7 +38,7 @@
 	<table style="width: 100%; font-size: 10px; border-collapse: collapse" border="1" class="table table-condensed">
 		<tr>
 			<th width="5%">No</th>
-			<th width="15%">No. Karyawan</th>
+			<th width="5%">NIK</th>
 			<th width="10%">Nama Lengkap</th>
 			<th width="7%">Absen Masuk</th>
 			<th width="7%">Absen Pulang</th>
@@ -46,29 +46,35 @@
 			<th width="10%">Status Absen</th>
 		</tr>
 		<?php 
-		$data 	= $this->db->query("SELECT u.nama, u.divisi, t.id_karyawan, t.in_time, t.out_time, t.attendance_date, t.status FROM tbl_kehadiran t, tbl_users u WHERE u.nik = t.id_karyawan AND MID(t.attendance_date, 6, 2) = '$bulan'")->result();
-		if (empty($data)) {
+		if (count($data) === 0) {
 			echo "<tr><td colspan='8' style='text-align: center'> - Tidak ada data - </td></tr>";
 		} else {
 			$no = 1;
-			foreach($data as $d) {
+			foreach($data as $b) {
 		?>
 		<tr>
-			<td style="text-align: center"><?=$no?></td>
-			<td style="text-align: center"><?=$d->id_karyawan?></td>
-			<td style="text-align: center"><?=$d->nama?></td>
-			<td style="text-align: center"><?=$d->in_time?></td>
-			<td style="text-align: center"><?=$d->out_time?></td>
-			<td style="text-align: center"><?=$d->attendance_date?></td>
-			<td style="text-align: center">
-			<?php
-			if($d->status == 'Masuk') {
-				echo 'masuk';
-			} else if($d->status == 'Pulang') {
-				echo 'pulang';
-			} ?>
-			</td>
-		</tr>	
+												<td>
+													<?= $no++ ?>
+												</td>
+												<td>
+													<?= $b['nik']; ?>
+												</td>
+												<td>
+													<?= $b['nama']; ?>
+												</td>
+												<td>
+													<?= $b['in_time']; ?>
+												</td>
+												<td>
+													<?= $b['out_time']; ?>
+												</td>
+												<td>
+													<?= tgl_indo($b['attendance_date']); ?>
+												</td>
+												<td>
+													<?= $b['status'] === 'Pulang' || $b['status'] === 'Masuk' ? 'Hadir' : 'Izin tidak masuk' ?>
+												</td>
+											</tr>
 		<?php
 			$no++;
 			}

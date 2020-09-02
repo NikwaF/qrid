@@ -19,9 +19,13 @@ class Presensi extends CI_Controller
         if(!isset($_SESSION['nik'])) {
 			redirect('autha');
 		}
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['data'] = $this->db->get('tbl_kehadiran')->result_array();
+        //$data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
         $data['title'] = 'ABSENSI UPK CERMEE  | Presensi Report';
+
+        $this->db->select('a.in_time, a.out_time,a.attendance_date,b.nama,a.id,a.status');
+        $this->db->from('tbl_kehadiran a');
+        $this->db->join('tbl_users b', 'a.id_user = b.id');
+        $data['data'] = $this->db->get()->result_array();
 
         $this->load->view('manajer/_partials/header', $data);
         $this->load->view('manajer/presensi', $data);

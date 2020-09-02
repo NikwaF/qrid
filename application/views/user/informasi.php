@@ -22,26 +22,24 @@
 									<table id="datatable1" class="table table-striped table-hover">
 										<thead>
 											<tr>
-												<th>No</th>
-												<th>Deskripsi</th>
+                        <th class="text-center">Status</th>
+												<th class="text-center">Tanggal</th>
+												<th class="text-center">Keterangan</th>
 											</tr>
 										</thead>
 										<tbody>
-											<?php
-											$i=1;
-											foreach ($data as $c) {
-											    $ids = $c['id_karyawan'];
-											    $query = $this->db->query("SELECT * FROM tbl_users WHERE id = '$ids'")->row_array();
-												?>
-												<tr>
-													<td>
-														<?= $i++ ?>
-													</td>
-													<td>
-													    Anda telah melakukan absensi pada tanggal <?= $c['tgl_absen']; ?> dengan nominal <?= $c['nominal'] ?>
-													</td>
-												</tr>
-											<?php } ?>
+<?php  if(count($data) == 0): ?>
+<tr><td colspan="3" class="text-center">Belum ada data</td></tr>
+<?php else: ?>
+<?php foreach($data as $dt): ?>
+<tr>       t
+<td class="text-center"><?= $dt['jam'] !== '-' ? '<i style="font-size:35px;color:green" class="fa fa-check-circle" aria-hidden="true"></i>' : '<i style="font-size:35px;color:red;" class="fa fa-external-link-square" aria-hidden="true"></i>'?></td>
+<td class="text-center"><?=  $dt['tanggal'];?></td>
+<td class="text-center"><?= $dt['status']; ?></td>
+</tr>
+<?php endforeach; ?>
+<?php endif; ?>
+                   
 										</tbody>
 									</table>
 								</div>

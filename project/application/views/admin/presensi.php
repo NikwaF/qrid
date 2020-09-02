@@ -34,7 +34,7 @@
 										<thead class="text-center">
 											<tr>
 												<th>ID</th>
-												<th>Nomer Karyawan</th>
+												<th>Nama Karyawan</th>
 												<th>Absen Masuk</th>
 												<th>Absen Keluar</th>
 												<th>Tanggal Absen</th>

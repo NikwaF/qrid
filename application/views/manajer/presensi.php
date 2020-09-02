@@ -70,7 +70,7 @@
 													<?= $i++ ?>
 												</td>
 												<td>
-													<?= $b['id_karyawan']; ?>
+													<?= $b['nama']; ?>
 												</td>
 												<td>
 													<?= $b['in_time']; ?>
@@ -79,10 +79,10 @@
 													<?= $b['out_time']; ?>
 												</td>
 												<td>
-													<?= $b['attendance_date']; ?>
+													<?= tgl_indo($b['attendance_date']); ?>
 												</td>
 												<td>
-													<?= $b['status']; ?>
+													<?= $b['status'] === 'Pulang' || $b['status'] === 'Masuk' ? 'Hadir' : 'Izin tidak masuk' ?>
 												</td>
 											</tr>
 											<?php

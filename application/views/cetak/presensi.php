@@ -11,11 +11,11 @@
 	<table style="width: 100%; font-size: 10px; border-collapse: collapse" border="1" class="table table-condensed">
 		<tr>
 			<th width="5%">No</th>
-			<th width="15%">No. Karyawan</th>
+			<th width="15%">NIK</th>
 			<th width="10%">Nama Lengkap</th>
 			<th width="7%">Absen Masuk</th>
 			<th width="7%">Absen Pulang</th>
-			<th width="8%">Waktu Absen</th>
+			<th width="8%">Tanggal Absen</th>
 			<th width="10%">Status Absen</th>
 		</tr>
 		<?php 
@@ -27,19 +27,12 @@
 		?>
 		<tr>
 			<td style="text-align: center"><?=$no?></td>
-			<td style="text-align: center"><?=$d->id_karyawan?></td>
-			<td style="text-align: center"><?=$d->nama?></td>
-			<td style="text-align: center"><?=$d->in_time?></td>
-			<td style="text-align: center"><?=$d->out_time?></td>
-			<td style="text-align: center"><?=$d->attendance_date?></td>
-			<td style="text-align: center">
-			<?php
-			if($d->status == 'Masuk') {
-				echo 'masuk';
-			} else if($d->status == 'Pulang') {
-				echo 'pulang';
-			} ?>
-			</td>
+			<td style="text-align: center"><?= $d['nik']?></td>
+			<td style="text-align: center"><?=$d['nama']?></td>
+			<td style="text-align: center"><?=$d['in_time']?></td>
+			<td style="text-align: center"><?=$d['out_time']?></td>
+			<td style="text-align: center"><?= tgl_indo($d['attendance_date'])?></td>
+			<td style="text-align: center"><?= $d['status'] === 'Pulang' || $d['status'] === 'Masuk' ? 'Hadir' : 'Izin tidak masuk' ?></td>
 		</tr>	
 		<?php
 			$no++;

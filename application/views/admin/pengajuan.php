@@ -30,12 +30,13 @@
 					<div class="card">
 						<div class="card-body">
 							<div class="col-lg-12">
+							<?= $this->session->flashdata('message') ?>
 								<div class="table-responsive">
 									<table id="datatable1" class=" table table-striped table-hover">
 										<thead>
 											<tr>
-												<th>ID</th>
-												<th>NIK</th>
+												<th>No</th>
+												<th>Nama</th>
 												<th>Pengajuan</th>
 												<th>Alasan</th>
 												<th>Tanggal</th>
@@ -52,16 +53,16 @@
 													<?= $i++ ?>
 												</td>
 												<td>
-													<?= $b['nik']; ?>
+													<?= $b['nama']; ?>
 												</td>
 												<td>
-													<?= $b['pengajuan']; ?>
+													<?= $b['jenis_pengajuan']; ?>
 												</td>
 												<td>
 													<?= $b['reason']; ?>
 												</td>
 												<td>
-													<?= $b['pengajuan_date']; ?>
+													<?= tgl_indo($b['pengajuan_date']); ?>
 												</td>
 												<td>
 													<a href="<?= base_url(); ?>admin/presensi/hapus_request/<?= $b['id']; ?>"
