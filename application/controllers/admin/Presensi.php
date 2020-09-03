@@ -17,7 +17,6 @@ class Presensi extends CI_Controller
         // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
         $this->db->select('a.in_time, a.out_time,a.attendance_date,b.nama,a.id,a.status');
         $this->db->from('tbl_kehadiran a');
-	$this->db->where('a.status !=','Ijin');
         $this->db->join('tbl_users b', 'a.id_user = b.id');
         $data['data'] = $this->db->get()->result_array();
         $data['title'] = 'ABSENSI UPK CERMEE | Presensi Report';
@@ -64,7 +63,7 @@ class Presensi extends CI_Controller
 		}
         $data['title'] = 'SI Absensi | Add Request';
         // $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['data'] = $this->db->query("SELECT * FROM tbl_users WHERE id_role = 3")->result_array();
+        $data['data'] = $this->db->query("SELECT * FROM tbl_users WHERE (id_role = 3 OR id_role = 2) AND nik !=".$this->session->userdata('nik'))->result_array();
 
 		$this->form_validation->set_rules('nik', 'nama lengkap', 'trim|required');
 		$this->form_validation->set_rules('request', 'request karyawan', 'trim|required');
@@ -75,7 +74,7 @@ class Presensi extends CI_Controller
             $this->load->view('admin/add_request', $data);
             $this->load->view('admin/_partials/footer');
         } else {
-            $userdata = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row();
+            $userdata = $this->db->get_where('tbl_users', ['id' => $this->input->post('nik')])->row();
             $get_pengajuan = $this->db->get_where('tbl_pengajuan', ['pengajuan_date' => date('Y-m-d'), 'id_user' => $this->input->post('nik')])->row();
 
             if($get_pengajuan !== null){

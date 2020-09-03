@@ -71,7 +71,7 @@
 													<?=tgl_indo($b['attendance_date']) ?>
 													</td>
 													<td>
-														<?= $b['status'] === 'Pulang' || $b['status'] === 'Masuk' ? 'Hadir' : '-' ?>
+														<?= $b['status'] === 'Pulang' || $b['status'] === 'Masuk' ? 'Hadir' : 'Izin' ?>
 													</td>
 												</tr>
 												<?php

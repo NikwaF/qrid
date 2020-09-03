@@ -1,90 +1,65 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Informasi extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
+        if($this->session->userdata('level') == "karyawan") {
+            redirect('auth/logout');
+        } elseif($this->session->userdata('level') == "manajer") {
+            redirect('autha/logout');
+        }
     }
 
     public function index()
     {
-        if(!isset($_SESSION['nik'])) {
-			redirect('authw');
-		}
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['data'] = $this->db->get('tbl_informasi')->result_array();
-        $data['title'] = 'ABSENSI UPK CERMEE | Information List';
+        if (!isset($_SESSION['nik'])) {
+            redirect('auth');
+        } else {
+        // $data['judul'] = 'Dashboard';
+        //$data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        $query_user = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
+        $id_pegawai = $query_user['id'];
+        $data['data'] = $this->list_kehadiran();
+        $data['title'] = 'ABSENSI UPK CERMEE  | Informasi';
 
         $this->load->view('admin/_partials/header', $data);
-        $this->load->view('admin/informasi', $data);
+        $this->load->view('admin/informasi_absen', $data);
         $this->load->view('admin/_partials/footer');
-    }
-
-    public function tambah()
-    {
-        if(!isset($_SESSION['nik'])) {
-			redirect('authw');
-		}
-        $data['title'] = 'ABSENSI UPK CERMEE | Add Informasi';
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-
-		$this->form_validation->set_rules('informasi', 'deskripsi lengkap', 'trim|required');      
-
-        if ($this->form_validation->run() == false) {
-            $this->load->view('admin/_partials/header', $data);
-            $this->load->view('admin/add_informasi', $data);
-            $this->load->view('admin/_partials/footer');
-        } else {
-            $data = [
-                'deskripsi' => trim($this->input->post('informasi')),
-                'tgl_post' => date('Y-m-d'),
-            ];
-            $this->db->insert('tbl_informasi', $data);
-            echo 'error';
-            $this->session->set_flashdata('message', '<div class="alert alert-outline alert-success">Data berhasil ditambahkan!<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-            redirect('admin/informasi');
         }
     }
 
-    public function edit()
-    {
-        if(!isset($_SESSION['nik'])) {
-			redirect('authw');
-		}
-        $data['title'] = 'SI Absensi | Edit Informasi';
-        $id = $this->uri->segment(4);
-        $data['user_session'] = $this->db->get_where('tbl_users', ['nik' => $this->session->userdata('nik')])->row_array();
-        $data['edit'] = $this->db->get_where('tbl_informasi', ['id' => $id])->row_array();
 
-        $this->form_validation->set_rules('id', 'id informasi', 'trim|required');
-		$this->form_validation->set_rules('informasi', 'deskripsi lengkap', 'trim|required');      
+    private function list_kehadiran(){
+      $userdata = $this->db->get_where('tbl_users', ['nik' => $_SESSION['nik']])->row();
 
-        if ($this->form_validation->run() == false) {
-            $this->load->view('admin/_partials/header', $data);
-            $this->load->view('admin/edit_informasi', $data);
-            $this->load->view('admin/_partials/footer');
+      $kehadiran = $this->db->get_where('tbl_kehadiran', ['id_user' => $userdata->id])->result();
+      $data = [];
+
+      foreach($kehadiran as $kh){
+        $qr_code = $this->db->get_where('tbl_qrcode', ['tanggal' => $kh->attendance_date])->row();
+        $tmp = [
+          'tanggal' => tgl_indo($kh->attendance_date),
+        ];
+        if($kh->status === 'Ijin'){
+          $ijin = $this->db->get_where('tbl_pengajuan', ['id_user' => $kh->id_user, 'pengajuan_date' => $kh->attendance_date])->row();
+          $tmp['jam'] = '-';
+          $tmp['status'] = $ijin->jenis_pengajuan;
         } else {
-            $data = [
-                'deskripsi' => trim($this->input->post('informasi')),
-            ];
-            $this->db->where('id', $this->input->post('id'));
-            $this->db->update('tbl_informasi', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-outline alert-success">Data berhasil diubah!<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-            redirect('admin/informasi');
+          $tmp['jam'] = $kh->in_time .' - ' .$kh->out_time;
+          $masuk = strtotime($kh->in_time);
+          $jadwal = strtotime($qr_code->jam_masuk);
+          if($masuk > $jadwal){
+            $tmp['status'] = 'Hadir (Terlambat)';
+          } else{
+            $tmp['status'] = 'Hadir';
+          }
         }
-    }
+        array_push($data, $tmp);
+      }
 
-    public function hapus($id)
-    {
-        $this->db->where('id', $id);
-		$this->db->delete('tbl_informasi');
-        redirect('admin/informasi');
-    }
-
+       return $data;
+      }	
 
 }
-
-/* End of file Jenis.php */
-/* Location: ./application/controllers/administrator/Jenis.php */

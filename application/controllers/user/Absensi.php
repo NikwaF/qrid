@@ -1,4 +1,4 @@
-  <?php
+<?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Absensi extends CI_Controller
@@ -175,7 +175,7 @@ class Absensi extends CI_Controller
     }
 
     public function showqr()
-    {
+    { 
         if (!isset($_SESSION['nik'])) {
             redirect('auth');
         } else {

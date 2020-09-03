@@ -35,7 +35,7 @@ class Cetak extends CI_Controller {
 		}
 		
 		//view tampilan website\
-		$a['data']		= $this->db->query("SELECT p.nik as nik_karyawan, p.nama as nama_lengkap, role.nama_role as level, COUNT(t.id_user) as total_absen, SUM(nominal) as total_gaji_kerja, CASE WHEN COUNT(t.id_user) < 30 THEN 'Absen Tidak Mencukupi Kriteria' ELSE 'Absen Mencukupi Kriteria' END AS info_absen FROM tbl_users p LEFT JOIN tbl_gaji_pegawai t ON p.id=t.id_user JOIN role on p.id_role = role.id_role WHERE p.id_role IN (3) GROUP BY p.id")->result();
+		$a['data']		= $this->db->query("SELECT p.nik as nik_karyawan, p.nama as nama_lengkap, role.nama_role as level, COUNT(t.id_user) as total_absen, SUM(nominal) as total_gaji_kerja, CASE WHEN COUNT(t.id_user) < 30 THEN 'Absen Tidak Mencukupi Kriteria' ELSE 'Absen Mencukupi Kriteria' END AS info_absen FROM tbl_users p LEFT JOIN tbl_gaji_pegawai t ON p.id=t.id_user JOIN role on p.id_role = role.id_role WHERE p.id_role IN (2,3) GROUP BY p.id")->result();
 		$this->load->view('cetak/gaji', $a);
 	}
 

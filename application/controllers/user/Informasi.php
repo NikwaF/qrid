@@ -38,6 +38,7 @@ class Informasi extends CI_Controller
       $data = [];
 
       foreach($kehadiran as $kh){
+        $qr_code = $this->db->get_where('tbl_qrcode', ['tanggal' => $kh->attendance_date])->row();
         $tmp = [
           'tanggal' => tgl_indo($kh->attendance_date),
         ];
@@ -47,7 +48,13 @@ class Informasi extends CI_Controller
           $tmp['status'] = $ijin->jenis_pengajuan;
         } else {
           $tmp['jam'] = $kh->in_time .' - ' .$kh->out_time;
-          $tmp['status'] = 'Hadir';
+          $masuk = strtotime($kh->in_time);
+          $jadwal = strtotime($qr_code->jam_masuk);
+          if($masuk > $jadwal){
+            $tmp['status'] = 'Hadir (Terlambat)';
+          } else{
+            $tmp['status'] = 'Hadir';
+          }
         }
         array_push($data, $tmp);
       }

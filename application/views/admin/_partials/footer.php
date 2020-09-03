@@ -10,6 +10,12 @@
 					</a>
 				</li>
 				<li>
+					<a href="<?= base_url(); ?>admin/absensi" class="<?php if($this->uri->segment(2) == "absensi") { echo "active"; } ?>">
+						<div class="gui-icon"><i class="md md-info"></i></div>
+						<span class="title">Absensi</span>
+					</a>
+				</li>				
+				<li>
 					<a href="<?= base_url(); ?>admin/administrator" class="<?php if($this->uri->segment(2) == "administrator") { echo "active"; } ?>">
 						<div class="gui-icon"><i class="md md-account-circle"></i></div>
 						<span class="title">Kelola Operator</span>
@@ -18,7 +24,7 @@
 				<li>
 					<a href="<?= base_url(); ?>admin/informasi" class="<?php if($this->uri->segment(2) == "informasi") { echo "active"; } ?>">
 						<div class="gui-icon"><i class="md md-announcement"></i></div>
-						<span class="title">Kelola Informasi</span>
+						<span class="title">Informasi</span>
 					</a>
 				</li>
 				<li>
